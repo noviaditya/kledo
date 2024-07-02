@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalStageController;
 use App\Http\Controllers\ApproverController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('approvers', [ApproverController::class, 'store']);
+Route::post('approval-stages', [ApprovalStageController::class, 'store']);
