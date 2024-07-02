@@ -17,7 +17,7 @@ class CreateApprovalsTable extends Migration
             $table->id();
             $table->integer('expense_id');
             $table->integer('approver_id');
-            $table->integer('status_id');
+            $table->smallInteger('status_id')->default(1);
             $table->timestamps();
         });
     }
