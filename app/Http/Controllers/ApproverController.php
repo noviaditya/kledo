@@ -8,7 +8,7 @@ use App\Repositories\ApproverRepository;
 class ApproverController extends Controller
 {
 
-    public function addApprover(StoreApproverRequest $request){
+    public function store(StoreApproverRequest $request){
         $input      = $request->validated();
         $approver   = new ApproverRepository();
         $result     = $approver->store($input);

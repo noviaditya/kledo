@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('approvers', [ApproverController::class, 'addApprover']);
+Route::post('approvers', [ApproverController::class, 'store']);
