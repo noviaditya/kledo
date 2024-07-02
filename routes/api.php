@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('approvers', [ApproverController::class, 'store']);
 Route::post('approval-stages', [ApprovalStageController::class, 'store']);
+Route::put('approval-stages/{id}', [ApprovalStageController::class, 'update']);
