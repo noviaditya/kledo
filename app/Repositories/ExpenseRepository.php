@@ -53,17 +53,19 @@ class ExpenseRepository
             DB::beginTransaction();
 
             //check expense yang harus diapprove
-            $required_approval = $this->checkApproval($expense->approvals);
+            $required_approval = $this->checkRequiredApproval($expense->approvals);
 
             //jika tidak sesuai, return validation
             if ($required_approval != $data['approver_id']) {
                 throw new InvalidApproverException("Approval failed. Please follow approval stage order.");
             }
 
-            $expense->update(['status_id' => 2]);
-
             $approval = $expense->approvals->where('approver_id', $data['approver_id'])->first();
             $approval->update(['status_id' => 2]);
+
+            if($this->checkAllApproval($expense->id)){
+                $expense->update(['status_id' => 2]);
+            }
 
             DB::commit();
 
@@ -102,7 +104,7 @@ class ExpenseRepository
         return $response;
     }
 
-    public function checkApproval($approvals)
+    public function checkRequiredApproval($approvals)
     {
         $valid_approver_id = 0;
         foreach ($approvals as $approval) {
@@ -113,6 +115,18 @@ class ExpenseRepository
         }
 
         return $valid_approver_id;
+    }
+
+    public function checkAllApproval($expense_id)
+    {
+        $approvals = Approval::where('expense_id', $expense_id)->get();
+        foreach ($approvals as $approval) {
+            if ($approval['status_id'] == 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function show($id)
