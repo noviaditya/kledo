@@ -15,10 +15,12 @@ class StatusSeeder extends Seeder
     public function run()
     {
         Status::create([
+            'id'   => 1,
             'name' => 'menunggu persetujuan'
         ]);
 
         Status::create([
+            'id'   => 2,
             'name' => 'disetujui'
         ]);
     }
