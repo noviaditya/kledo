@@ -12,4 +12,9 @@ class Expense extends Model
     public $table       = 'expenses';
     public $fillable    = ['amount', 'status_id'];
     public $hidden      = ['updated_at', 'created_at'];
+
+    public function approvals()
+    {
+        return $this->hasMany(Approval::class, 'expense_id', 'id')->orderBy('approver_id', 'asc');
+    }
 }

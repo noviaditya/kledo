@@ -2,14 +2,31 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\InvalidApproverException;
+use App\Models\Approval;
+use App\Models\ApprovalStage;
 use App\Models\Expense;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseRepository
 {
     public function store($data)
     {
         try {
+            DB::beginTransaction();
             $expense = Expense::create($data);
+            $approval_stages = ApprovalStage::orderBy('id', 'ASC')->get();
+
+            foreach ($approval_stages as $stage) {
+                Approval::create([
+                    'expense_id'    => $expense->id,
+                    'approver_id'   => $stage->approver_id,
+                    'status_id'     => 1,
+                ]);
+            }
+            DB::commit();
+
             return [
                 'code'  => 200,
                 'data'  => [
@@ -17,7 +34,8 @@ class ExpenseRepository
                     'data'      => $expense
                 ]
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            DB::rollBack();
             return [
                 'code'  => 400,
                 'data'  => [
@@ -25,5 +43,75 @@ class ExpenseRepository
                 ]
             ];
         }
+    }
+
+    public function approve($id, $data)
+    {
+        try {
+            $expense = Expense::with('approvals')->findOrFail($id);
+
+            DB::beginTransaction();
+
+            //check expense yang harus diapprove
+            $required_approval = $this->checkApproval($expense->approvals);
+
+            //jika tidak sesuai, return validation
+            if ($required_approval != $data['approver_id']) {
+                throw new InvalidApproverException("Approval failed. Please follow approval stage order.");
+            }
+
+            $expense->update(['status_id' => 2]);
+
+            $approval = $expense->approvals->where('approver_id', $data['approver_id'])->first();
+            $approval->update(['status_id' => 2]);
+
+            DB::commit();
+
+            $response = [
+                'code'  => 200,
+                'data'  => [
+                    'message'   => 'Expense approval success.',
+                    'data'      => $expense
+                ]
+            ];
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            $response = [
+                'code'  => 404,
+                'data'  => [
+                    'message'   => 'Expense not found.'
+                ]
+            ];
+        } catch (InvalidApproverException $e) {
+            DB::rollBack();
+            $response = [
+                'code'  => 422,
+                'data'  => [
+                    'message'   => $e->getMessage()
+                ]
+            ];
+        } catch (Exception $e) {
+            DB::rollBack();
+            $response = [
+                'code'  => 500,
+                'data'  => [
+                    'message'   => 'Expense approval failed.'
+                ]
+            ];
+        }
+
+        return $response;
+    }
+
+    public function checkApproval($approvals)
+    {
+        $valid_approver_id = 0;
+        foreach ($approvals as $approval) {
+            if ($approval['status_id'] == 1) {
+                $valid_approver_id = $approval['approver_id'];
+                break;
+            }
+        }
+
+        return $valid_approver_id;
     }
 }
