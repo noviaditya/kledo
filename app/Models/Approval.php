@@ -20,6 +20,6 @@ class Approval extends Model
 
     public function status()
     {
-        return $this->belongsTo(Approver::class, 'status_id', 'id');
+        return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 }
