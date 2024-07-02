@@ -21,9 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('approvers', [ApproverController::class, 'store']);
-Route::post('approval-stages', [ApprovalStageController::class, 'store']);
-Route::put('approval-stages/{id}', [ApprovalStageController::class, 'update']);
-Route::post('expense', [ExpenseController::class, 'store']);
-Route::patch('expense/{id}/approve', [ExpenseController::class, 'approve']);
-Route::get('expense/{id}', [ExpenseController::class, 'show']);
+Route::post('approvers', [ApproverController::class, 'store'])->name('approvers.store');
+Route::post('approval-stages', [ApprovalStageController::class, 'store'])->name('approval-stages.store');
+Route::put('approval-stages/{id}', [ApprovalStageController::class, 'update'])->name('approval-stages.update');
+Route::post('expense', [ExpenseController::class, 'store'])->name('expense.store');
+Route::patch('expense/{id}/approve', [ExpenseController::class, 'approve'])->name('expense.approve');
+Route::get('expense/{id}', [ExpenseController::class, 'show'])->name('expense.show');
