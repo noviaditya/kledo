@@ -17,4 +17,9 @@ class Expense extends Model
     {
         return $this->hasMany(Approval::class, 'expense_id', 'id')->orderBy('approver_id', 'asc');
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id', 'id');
+    }
 }

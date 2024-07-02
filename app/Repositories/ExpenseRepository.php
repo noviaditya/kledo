@@ -114,4 +114,46 @@ class ExpenseRepository
 
         return $valid_approver_id;
     }
+
+    public function show($id)
+    {
+        try {
+            $expense = Expense::with(['status', 'approvals', 'approvals.approver', 'approvals.status'])->find($id);
+
+            if(empty($expense)){
+                return [
+                    'code'      => 404,
+                    'data'  => [
+                        'message'   => 'Expense data not found.'
+                    ]
+                ];
+            }
+
+            return [
+                'code'  => 200,
+                'data'  => [
+                    'id'        => $expense->id,
+                    'amount'    => $expense->amount,
+                    'status'    => $expense->status,
+                    'approval'  => $this->cleanApprovals($expense->approvals)
+                ]
+            ];
+        } catch (Exception $e) {
+            return [
+                'code'  => 500,
+                'data'  => [
+                    'message'   => 'Get data expense failed.'
+                ]
+            ];
+        }
+    }
+
+    public function cleanApprovals($approvals){
+        foreach($approvals as $approval){
+            unset($approval['expense_id']);
+            unset($approval['approver_id']);
+            unset($approval['status_id']);
+        }
+        return $approvals;
+    }
 }

@@ -23,4 +23,11 @@ class ExpenseController extends Controller
 
         return response()->json($result['data'], $result['code']);
     }
+
+    public function show($id){
+        $expense        = new ExpenseRepository();
+        $result         = $expense->show($id);
+
+        return response()->json($result['data'], $result['code']);
+    }
 }

@@ -12,4 +12,14 @@ class Approval extends Model
     public $table       = 'approvals';
     public $fillable    = ['expense_id', 'approver_id', 'status_id'];
     public $hidden      = ['updated_at', 'created_at'];
+
+    public function approver()
+    {
+        return $this->belongsTo(Approver::class, 'approver_id', 'id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Approver::class, 'status_id', 'id');
+    }
 }
