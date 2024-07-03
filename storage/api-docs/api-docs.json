@@ -1,0 +1,347 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Kledo Test API Documentation",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/approval-stages/": {
+            "post": {
+                "tags": [
+                    "ApprovalStage"
+                ],
+                "summary": "Create new approval stage",
+                "operationId": "postApprovalStage",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "approver_id"
+                                ],
+                                "properties": {
+                                    "approver_id": {
+                                        "type": "number",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success create approval stage",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/approval-stages/{id}": {
+            "put": {
+                "tags": [
+                    "ApprovalStage"
+                ],
+                "summary": "Update an existing approval stage",
+                "operationId": "putApprovalStage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the approval stage to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "approver_id"
+                                ],
+                                "properties": {
+                                    "approver_id": {
+                                        "type": "number",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated approval stage",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Approval stage not found"
+                    }
+                }
+            }
+        },
+        "/api/approvers/": {
+            "post": {
+                "tags": [
+                    "Approver"
+                ],
+                "summary": "Create new approver",
+                "operationId": "postApprover",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success create approver",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/expense/": {
+            "post": {
+                "tags": [
+                    "Expense"
+                ],
+                "summary": "Create new expense",
+                "operationId": "postExpense",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "amount"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": "number",
+                                        "example": 150000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success create expense",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/expense/{id}/approve": {
+            "patch": {
+                "tags": [
+                    "Expense"
+                ],
+                "summary": "Update expense to be approved",
+                "operationId": "patchExpenseApproval",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the expense to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "approver_id"
+                                ],
+                                "properties": {
+                                    "approver_id": {
+                                        "type": "number",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully approve expense",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Expense not found"
+                    },
+                    "422": {
+                        "description": "Invalid approver_id. Please follow approver stage order."
+                    }
+                }
+            }
+        },
+        "/api/expense/{id}": {
+            "get": {
+                "tags": [
+                    "Expense"
+                ],
+                "summary": "Get Expense",
+                "operationId": "getExpenseById",
+                "responses": {
+                    "200": {
+                        "description": "Successfully get expense",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "amount": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "object"
+                                        },
+                                        "approval": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No approval stages found"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "ApprovalStage",
+            "description": "ApprovalStage"
+        },
+        {
+            "name": "ApprovalStage",
+            "description": "ApprovalStage"
+        },
+        {
+            "name": "Approver",
+            "description": "Approver"
+        },
+        {
+            "name": "Expense",
+            "description": "Expense"
+        },
+        {
+            "name": "Expense",
+            "description": "Expense"
+        },
+        {
+            "name": "Expense",
+            "description": "Expense"
+        }
+    ]
+}
